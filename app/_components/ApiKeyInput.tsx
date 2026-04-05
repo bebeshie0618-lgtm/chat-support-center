@@ -22,10 +22,10 @@ export function ApiKeyInput({ onSubmit }: Props) {
         backgroundColor: '#141414',
         borderRadius: 16,
         border: '1px solid #222',
-        padding: '40px 32px',
+        padding: '32px 20px',
         display: 'flex',
         flexDirection: 'column',
-        gap: 24,
+        gap: 20,
       }}>
         <h2 style={{
           fontSize: 16,

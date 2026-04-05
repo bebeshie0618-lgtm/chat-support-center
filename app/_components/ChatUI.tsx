@@ -35,6 +35,11 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
     setInput('')
     setIsStreaming(true)
 
+    // textareaの高さをリセット
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto'
+    }
+
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -94,17 +99,17 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
       {/* メッセージ一覧 */}
       <div
         ref={scrollRef}
+        className="chat-messages-area"
         style={{
           flex: 1,
           overflowY: 'auto',
-          padding: '20px 20px 8px',
           display: 'flex',
           flexDirection: 'column',
-          gap: 12,
+          gap: 10,
         }}
       >
         {messages.length === 0 && (
-          <p style={{ color: '#555', fontSize: 14, textAlign: 'center', marginTop: 40 }}>
+          <p className="chat-placeholder" style={{ color: '#555', textAlign: 'center', marginTop: 40 }}>
             {placeholder || 'メッセージを入力してください'}
           </p>
         )}
@@ -114,16 +119,13 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
             className="animate-chat-message-in"
             style={{
               alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-              maxWidth: '80%',
+              maxWidth: '85%',
             }}
           >
-            <div style={{
-              padding: '10px 14px',
+            <div className="chat-bubble" style={{
               borderRadius: msg.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
               backgroundColor: msg.role === 'user' ? '#C8A84B' : '#1e1e1e',
               color: msg.role === 'user' ? '#0a0a0a' : '#f0f0f0',
-              fontSize: 14,
-              lineHeight: 1.7,
               whiteSpace: 'pre-wrap',
               wordBreak: 'break-word',
             }}>
@@ -134,12 +136,12 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
       </div>
 
       {/* 入力エリア */}
-      <div style={{
-        padding: '12px 20px 20px',
+      <div className="chat-input-area" style={{
         borderTop: '1px solid #1e1e1e',
         display: 'flex',
         flexDirection: 'column',
-        gap: 8,
+        gap: 6,
+        backgroundColor: '#111',
       }}>
         {messages.length > 0 && (
           <button
@@ -157,7 +159,7 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
             会話をリセット
           </button>
         )}
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
           <textarea
             ref={inputRef}
             value={input}
@@ -166,19 +168,18 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
             placeholder="メッセージを入力..."
             disabled={isStreaming}
             rows={1}
+            className="chat-textarea"
             style={{
               flex: 1,
-              padding: '10px 14px',
               borderRadius: 10,
               border: '1px solid #333',
               backgroundColor: '#141414',
               color: '#f0f0f0',
-              fontSize: 14,
               lineHeight: 1.5,
               resize: 'none',
               outline: 'none',
               fontFamily: 'inherit',
-              maxHeight: 100,
+              maxHeight: 80,
               overflow: 'auto',
               transition: 'border-color 0.2s ease',
             }}
@@ -187,19 +188,18 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
             onInput={e => {
               const el = e.currentTarget
               el.style.height = 'auto'
-              el.style.height = Math.min(el.scrollHeight, 100) + 'px'
+              el.style.height = Math.min(el.scrollHeight, 80) + 'px'
             }}
           />
           <button
             onClick={handleSend}
             disabled={isStreaming || !input.trim()}
+            className="chat-send-btn"
             style={{
-              padding: '10px 18px',
               borderRadius: 10,
               border: 'none',
               backgroundColor: isStreaming || !input.trim() ? '#333' : '#C8A84B',
               color: isStreaming || !input.trim() ? '#666' : '#0a0a0a',
-              fontSize: 14,
               fontWeight: 600,
               cursor: isStreaming || !input.trim() ? 'default' : 'pointer',
               transition: 'all 0.2s ease',

@@ -65,3 +65,73 @@ body {
 .animate-chat-message-in {
   animation: chat-message-in 0.25s ease forwards;
 }
+
+/* === Responsive: Chat UI === */
+
+.chat-messages-area {
+  padding: 16px 12px 8px;
+}
+
+.chat-placeholder {
+  fontSize: 13px;
+}
+
+.chat-bubble {
+  padding: 8px 12px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.chat-input-area {
+  padding: 8px 12px 12px;
+}
+
+.chat-textarea {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.chat-send-btn {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+@media (min-width: 768px) {
+  .chat-messages-area {
+    padding: 20px 20px 8px;
+  }
+
+  .chat-placeholder {
+    font-size: 14px;
+  }
+
+  .chat-bubble {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .chat-input-area {
+    padding: 12px 20px 20px;
+  }
+
+  .chat-textarea {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .chat-send-btn {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+}
+
+/* SafeArea padding for mobile keyboards */
+.chat-input-area {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .chat-input-area {
+    padding-bottom: 20px;
+  }
+}
