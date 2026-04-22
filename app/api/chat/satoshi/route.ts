@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { AI_MODEL } from '@/lib/ai-config'
 
 const SYSTEM_PROMPT = `あなたは「サトシ」です。
 副業・ビジネス・コンテンツ作成の専門コンサルタントとして、
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
   try {
     const client = new Anthropic({ apiKey })
     const stream = await client.messages.create({
-      model: 'claude-opus-4-5',
+      model: AI_MODEL,
       max_tokens: 1000,
       system: SYSTEM_PROMPT,
       messages: messages.map((m: { role: string; content: string }) => ({
