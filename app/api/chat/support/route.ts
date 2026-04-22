@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
-import { AI_MODEL } from '@/lib/ai-config'
+import { AI_MODEL, getAiErrorMessage } from '@/lib/ai-config'
 
 const SYSTEM_PROMPT = `あなたはAI MASTERBALLの専任サポートスタッフです。
 購入してくれたユーザーがAI MASTERBALLを使いこなせるよう、
@@ -70,11 +70,7 @@ export async function POST(request: Request) {
       headers: { 'Content-Type': 'text/plain; charset=utf-8' },
     })
   } catch (e) {
-    const msg = e instanceof Error ? e.message : 'APIの呼び出しに失敗しました'
-    const isAuthError = msg.includes('401') || msg.includes('authentication') || msg.includes('invalid')
-    return Response.json(
-      { error: isAuthError ? 'APIキーが無効です。正しいキーを入力してください。' : msg },
-      { status: isAuthError ? 401 : 500 },
-    )
+    const { message, status } = getAiErrorMessage(e)
+    return Response.json({ error: message }, { status })
   }
 }
