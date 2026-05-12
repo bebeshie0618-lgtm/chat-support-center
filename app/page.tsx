@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MasterBallAnimation } from './_components/MasterBallAnimation'
 import { ApiKeyInput } from './_components/ApiKeyInput'
 import { MainScreen } from './_components/MainScreen'
@@ -11,8 +11,30 @@ export default function Home() {
   const [phase, setPhase] = useState<AppPhase>('ball')
   const [apiKey, setApiKey] = useState('')
 
+  useEffect(() => {
+    const saved = localStorage.getItem('csc-api-key')
+    if (saved) {
+      setApiKey(saved)
+      setPhase('main')
+    }
+  }, [])
+
+  function handleChangeApiKey() {
+    localStorage.removeItem('csc-api-key')
+    setApiKey('')
+    setPhase('apikey')
+  }
+
   if (phase === 'ball') {
-    return <MasterBallAnimation onComplete={() => setPhase('apikey')} />
+    return <MasterBallAnimation onComplete={() => {
+      const saved = localStorage.getItem('csc-api-key')
+      if (saved) {
+        setApiKey(saved)
+        setPhase('main')
+      } else {
+        setPhase('apikey')
+      }
+    }} />
   }
 
   if (phase === 'apikey') {
@@ -26,5 +48,5 @@ export default function Home() {
     )
   }
 
-  return <MainScreen apiKey={apiKey} />
+  return <MainScreen apiKey={apiKey} onChangeApiKey={handleChangeApiKey} />
 }

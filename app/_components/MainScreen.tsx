@@ -12,9 +12,9 @@ const MENU_ITEMS: { key: MenuKey; label: string; shortLabel: string }[] = [
   { key: 'works', label: '作品例', shortLabel: '作品例' },
 ]
 
-type Props = { apiKey: string }
+type Props = { apiKey: string; onChangeApiKey: () => void }
 
-export function MainScreen({ apiKey }: Props) {
+export function MainScreen({ apiKey, onChangeApiKey }: Props) {
   const [active, setActive] = useState<MenuKey>('support')
 
   return (
@@ -96,6 +96,25 @@ export function MainScreen({ apiKey }: Props) {
               </button>
             ))}
           </nav>
+
+          <div style={{ marginTop: 'auto' }}>
+            <button
+              onClick={onChangeApiKey}
+              style={{
+                width: '100%',
+                padding: '8px 14px',
+                borderRadius: 8,
+                border: '1px solid #333',
+                backgroundColor: 'transparent',
+                color: '#666',
+                fontSize: 11,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              APIキーを変更
+            </button>
+          </div>
         </aside>
 
         {/* メインエリア */}

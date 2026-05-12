@@ -68,7 +68,12 @@ export function ApiKeyInput({ onSubmit }: Props) {
         />
 
         <button
-          onClick={() => key.trim() && onSubmit(key.trim())}
+          onClick={() => {
+            if (key.trim()) {
+              localStorage.setItem('csc-api-key', key.trim())
+              onSubmit(key.trim())
+            }
+          }}
           disabled={!key.trim()}
           style={{
             width: '100%',

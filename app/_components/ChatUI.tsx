@@ -11,7 +11,14 @@ type Props = {
 }
 
 export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
-  const [messages, setMessages] = useState<Message[]>([])
+  const storageKey = `csc-chat-${endpoint.split('/').pop()}`
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (typeof window === 'undefined') return []
+    try {
+      const saved = localStorage.getItem(storageKey)
+      return saved ? JSON.parse(saved) : []
+    } catch { return [] }
+  })
   const [input, setInput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -20,6 +27,12 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages])
+
+  useEffect(() => {
+    if (!isStreaming && messages.length > 0) {
+      localStorage.setItem(storageKey, JSON.stringify(messages))
+    }
+  }, [messages, isStreaming, storageKey])
 
   useEffect(() => {
     if (!isStreaming) inputRef.current?.focus()
@@ -92,6 +105,7 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
   function handleReset() {
     setMessages([])
     setInput('')
+    localStorage.removeItem(storageKey)
   }
 
   return (
@@ -156,7 +170,7 @@ export function ChatUI({ apiKey, endpoint, placeholder }: Props) {
               padding: '2px 8px',
             }}
           >
-            会話をリセット
+            新しい会話を始める
           </button>
         )}
         <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
